@@ -1,0 +1,42 @@
+@import "../SCSS/variables";
+@import "../SCSS/index";
+
+header {
+  font-size: 14px;
+  @extend %flex-box;
+  width: inherit;
+  .logo {
+    width: 33.3%;
+  }
+  ul {
+    @extend %flex-box;
+    @extend %menu;
+    justify-content: center;
+    padding: 0px;
+    width: 33.3%;
+    li {
+      margin: 0px 25px;
+    }
+  }
+  .rightMenu {
+    @extend %flex-box;
+    width: 33.3%;
+    justify-content: right;
+    .buttonSignUp {
+      opacity: 0.4;
+      background: 0px;
+    }
+    div {
+      margin: 0px 20px;
+      width: 2px;
+      height: 26px;
+      background: $dark-turquoise;
+  }
+  }
+  .buttonSignIn {
+    font-weight: 500;
+    padding: 4px 12px;
+    background: $light-turquoise;
+    border-radius: 5px;
+  }
+}

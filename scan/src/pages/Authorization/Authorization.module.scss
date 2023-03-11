@@ -1,0 +1,28 @@
+@import "../../SCSS/variables";
+@import "../../SCSS/index";
+
+.wrapper {
+  margin: 70px 0px;
+  @extend %flex-box;
+  justify-content: space-between;
+  .title {
+    width: 60%;
+    h1 {
+      font-size: 40px;
+      margin-top: 0px;
+    }
+    img {
+      margin-left: 130px;
+    }
+  }
+  .authorization {
+    width: 40%;
+    //margin-right: 100px;
+    position: relative;
+    img {
+      position: absolute;
+      left: -40px;
+      top: -40px;
+    }
+  }
+}

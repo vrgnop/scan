@@ -1,0 +1,10 @@
+@import "../../SCSS/variables";
+@import "../../SCSS/index";
+.wrapper {
+  width: 100%;
+  @extend %flex-box;
+  justify-content: flex-end;
+  @media screen and (min-width: $mobile){
+    display: none;
+  }
+}

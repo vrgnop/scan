@@ -1,0 +1,85 @@
+@import "../../SCSS/variables";
+@import "../../SCSS/index";
+
+
+.wrapper {
+  @extend %flex-box;
+  .title {
+    margin-bottom: 45px;
+    h1 {
+      @extend %title;
+      margin-bottom: 25px;
+    }
+    p {
+      font-size: 20px;
+    }
+  }
+  form {
+    @extend %shadowWrapper;
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 29px 44px;
+    min-height: 400px;
+    .inputWrapper {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .topForm {
+      width: 100%;
+      @extend %flex-box;
+      justify-content: space-between;
+      align-items: start;
+    };
+    .bottomForm {
+      width: 100%;
+      @extend %flex-box;
+      height: max-content;
+      justify-content: space-between;
+      align-items: center;
+      .button {
+        @extend %flex-box;
+        flex-direction: column;
+        align-items: start;
+        input {
+          padding: 16px 0px;
+          width: 300px;
+        }
+      }
+    };
+    .leftForm {
+      @extend %flex-box;
+      align-items: flex-start;
+      flex-direction: column;
+      width: 30%;
+
+      label {
+        width: 140%;
+      }
+    }
+    .rightForm {
+      width: 60%;
+      @extend %flex-box;
+      justify-content: space-between;
+      div {
+        width: 100%;
+      }
+    }
+  }
+  input[type=date] {
+    margin-right: 20px;
+    width: 150px;
+    &::-webkit-calendar-picker-indicator {
+      color: transparent;
+      opacity: 1;
+      background: url(../../assets/images/down-arrow.svg) no-repeat right;
+      background-size: contain;
+    }
+    &::-webkit-datetime-edit-text {
+      content: "";
+    }
+    &::-webkit-datetime-edit-fields-wrapper {
+      padding: 2px;
+    }
+  }
+}

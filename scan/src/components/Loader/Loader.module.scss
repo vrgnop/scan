@@ -1,0 +1,10 @@
+
+.wrapper {
+  @keyframes rotate {
+    to { transform: rotate(360deg); }
+  }
+
+  img {
+    animation: rotate 30s infinite linear;
+  }
+}
