@@ -2,5 +2,23 @@
 @import "../../SCSS/index";
 
 .ul {
+  @extend %flex-box;
   @extend %menu;
+  justify-content: center;
+  &.hiddenMobile {
+    @media screen and (max-width: $mobile){
+      display: none;
+    }
+  }
+  &.hiddenDesktop {
+    @media screen and (min-width: $mobile){
+      display: none;
+    }
+  }
+  li {
+    cursor: pointer;
+    a:-webkit-any-link {
+      color: inherit;
+    }
+  }
 }

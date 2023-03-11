@@ -1,51 +1,67 @@
 import React from "react";
 import classNames from "classnames";
 import styles from "./DropDown.module.scss";
-import Functions from "../../Functions/Functions";
+import Functions from "../../functions/functions";
 
-//Компонент для создания выпадающего списка4
+//Компонент для создания выпадающего списка
 
-function DropDown({ items, keys, onClick, addItem }) {
-  const [isShowTask, setShowTask] = React.useState(false);
+function DropDown({ items, keys, onClick, selectItem }) {
+  const [isShowItem, setShowItem] = React.useState(false);
   const dropdownRef = React.useRef();
 
   React.useEffect(() => {
-    Functions.hideComponentClick(dropdownRef.current, setShowTask);
+    const onClickHideMenu = (e) => {
+      if (!e.composedPath().includes(dropdownRef.current)) {
+        setShowItem(false);
+      }
+    };
+    document.body.addEventListener("click", onClickHideMenu);
+    return () => document.body.removeEventListener("click", onClickHideMenu);
   }, []);
 
-  const onClickDropDown = (obj) => {
-    onClick(obj);
-    setShowTask(false);
+  const onClickDropDown = (e) => {
+    setShowItem(false);
+    onClick(e);
   };
 
   return (
     <div ref={dropdownRef} className={styles.wrapper}>
-      {(isShowTask && (
+      <div
+        className={classNames(styles.arrow, isShowItem ? styles.open : "")}
+        onClick={() => setShowItem(!isShowItem)}
+      ></div>
+      {(isShowItem && (
         <>
-          <button
+          <input
+            type={"button"}
+            value={""}
             className={classNames(styles.button, styles.close)}
-            onClick={() => setShowTask(!isShowTask)}
-          >
-            <div></div>
-          </button>
+            onClick={() => setShowItem(!isShowItem)}
+          ></input>
           <ul>
             {items.map((item, index) => (
               <li key={index}>
-                <button onClick={() => onClickDropDown(item)}>
-                  {item[keys]}
-                </button>
+                <input
+                  type={"button"}
+                  value={item[keys]}
+                  className={classNames(
+                    styles.items,
+                    index === items.length - 1 ? styles.lastItem : ""
+                  )}
+                  onClick={(e) => onClickDropDown(e)}
+                ></input>
               </li>
             ))}
           </ul>
         </>
       )) || (
-        <button
+        <input
+          type={"button"}
+          value={selectItem}
           className={classNames(styles.button, styles.open)}
-          onClick={() => setShowTask(!isShowTask)}
+          onClick={() => setShowItem(!isShowItem)}
           disabled={items.length === 0 ? true : false}
-        >
-          {addItem}
-        </button>
+        ></input>
       )}
     </div>
   );

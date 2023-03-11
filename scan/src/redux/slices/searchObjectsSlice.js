@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isPending } from "@reduxjs/toolkit";
 
 export const fetchObjectSearch = createAsyncThunk(
   "fetch/objectSearch",
@@ -16,30 +16,45 @@ export const fetchObjectSearch = createAsyncThunk(
     );
     const objects = await response.json();
 
-    return objects;
+    return {
+      objects: objects,
+      body: props.body,
+    };
   }
 );
 
 const initialState = {
   objects: null,
+  bodyRequest: null,
+  totalOptions: null,
   status: null, // loading // success // error
 };
 
-const requestSlice = createSlice({
-  name: "request",
+const searchObjectsSlice = createSlice({
+  name: "searchObjects",
   initialState,
-  extraReducers: {
-    [fetchObjectSearch.pending]: (state) => {
-      state.status = "loading";
+  reducers: {
+    setStatus(state) {
+      state.status = null;
     },
-    [fetchObjectSearch.fulfilled]: (state, action) => {
-      state.status = "success";
-      state.objects = action.payload.items;
-    },
-    [fetchObjectSearch.rejected]: (state) => {
-      state.status = "error";
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchObjectSearch.fulfilled, (state, action) => {
+        state.status = "success";
+        state.objects = action.payload.objects.items;
+        state.totalOptions = action.payload.objects.items.length;
+        state.bodyRequest = action.payload.body;
+      })
+      .addCase(fetchObjectSearch.rejected, (state) => {
+        state.status = "error";
+      })
+      .addCase(fetchObjectSearch.pending, (state) => {
+        state.status = "loading";
+      });
   },
 });
 
-export default requestSlice.reducer;
+export const { setStatus } = searchObjectsSlice.actions;
+
+export default searchObjectsSlice.reducer;

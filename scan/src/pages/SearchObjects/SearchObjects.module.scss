@@ -4,14 +4,44 @@
 
 .wrapper {
   @extend %flex-box;
+  align-items: flex-end;
+  justify-content: space-between;
+  @media screen and (max-width: $mobile){
+    width: auto;
+    flex-direction: column;
+  }
+  .leftWrapper {
+    width: 60%;
+    @media screen and (max-width: $mobile){
+      width: 100%;
+    }
+  }
   .title {
     margin-bottom: 45px;
+    @media screen and (max-width: $desktop){
+      display: flex;
+    }
     h1 {
       @extend %title;
       margin-bottom: 25px;
+      @media screen and (max-width: $mobile){
+        font-size: 22px;
+        width: 120%;
+      }
     }
     p {
       font-size: 20px;
+    }
+    .topPicturesMob {
+      @extend %flex-box;
+      align-items: center;
+      justify-content: center;
+      @media screen and (min-width: $mobile){
+        display: none;
+      }
+    }
+    img {
+      width: 60px;
     }
   }
   form {
@@ -21,6 +51,10 @@
     justify-content: space-between;
     padding: 29px 44px;
     min-height: 400px;
+    @media screen and (max-width: $mobile){
+      width: auto;
+      padding: 29px 20px;
+    }
     .inputWrapper {
       width: 100%;
       margin-bottom: 20px;
@@ -30,6 +64,9 @@
       @extend %flex-box;
       justify-content: space-between;
       align-items: start;
+      @media screen and (max-width: $mobile){
+        flex-direction: column;
+      }
     };
     .bottomForm {
       width: 100%;
@@ -37,14 +74,29 @@
       height: max-content;
       justify-content: space-between;
       align-items: center;
+      @media screen and (max-width: $mobile){
+        flex-direction: column;
+        div {
+          width: 100%;
+        }
+      }
       .button {
         @extend %flex-box;
         flex-direction: column;
         align-items: start;
+        @media screen and (max-width: $mobile){
+          width: inherit;
+        }
         input {
           padding: 16px 0px;
           width: 300px;
+          @media screen and (max-width: $desktop){
+            width: 100%;
+          }
         }
+        span {
+          color: $dark-grey;
+        };
       }
     };
     .leftForm {
@@ -52,13 +104,22 @@
       align-items: flex-start;
       flex-direction: column;
       width: 30%;
+      @media screen and (max-width: $mobile){
+        width: inherit;
+      }
 
       label {
         width: 140%;
+        @media screen and (max-width: $mobile){
+          width: inherit;
+        }
       }
     }
     .rightForm {
       width: 60%;
+      @media screen and (max-width: $mobile){
+        display: none;
+      }
       @extend %flex-box;
       justify-content: space-between;
       div {
@@ -69,6 +130,9 @@
   input[type=date] {
     margin-right: 20px;
     width: 150px;
+    @media screen and (max-width: $mobile){
+      width: 100%;
+    }
     &::-webkit-calendar-picker-indicator {
       color: transparent;
       opacity: 1;
@@ -80,6 +144,44 @@
     }
     &::-webkit-datetime-edit-fields-wrapper {
       padding: 2px;
+    }
+  }
+  .rightWrapper {
+    width: 40%;
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 40em;
+    @media screen and (max-width: $mobile){
+      margin-top: 30px;
+      width: 100%;
+      display: block;
+      height: auto;
+    }
+    .topPicturesDesc {
+      @extend %flex-box;
+      justify-content: space-around;
+      width: 100%;
+      @media screen and (max-width: $mobile){
+        display: none;
+      }
+    }
+    .bottomPictures {
+      width: 100%;
+      @extend %flex-box;
+      justify-content: flex-end;
+      @media screen and (min-width: $mobile) and (max-width: $desktop){
+        img {
+          width: 100%;
+        }
+      }
+      @media screen and (max-width: $mobile){
+        display: block;
+        width: inherit;
+        img {
+          width: inherit;
+        }
+      }
     }
   }
 }

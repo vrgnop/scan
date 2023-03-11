@@ -7,8 +7,13 @@ import Checkbox from "../../components/Checkbox/Checkbox";
 import Input from "../../components/Input/Input";
 import DropDown from "../../components/DropDown/DropDown";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchObjectSearch } from "../../redux/slices/searchObjectsSlice";
+import {
+  fetchObjectSearch,
+  setStatus,
+} from "../../redux/slices/searchObjectsSlice";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
+import NotFound from "../../components/NotFound/NotFound";
 
 const tonality = [
   {
@@ -69,11 +74,11 @@ function SearchObjects() {
     },
   ]);
   const [disabledButton, setDisabledButton] = React.useState(true);
+  const [isSearch, setIsSearch] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { token } = useSelector((state) => state.user);
-  const { objects } = useSelector((state) => state.request);
+  const { objects, status } = useSelector((state) => state.searchObjects);
   const body = {
     issueDateInterval: {
       startDate: dateStart,
@@ -126,7 +131,7 @@ function SearchObjects() {
     limit: +documentsCount,
     sortType: "sourceInfluence",
     sortDirectionType: "desc",
-    intervalType: "month",
+    intervalType: "day",
     histogramTypes: ["totalDocuments", "riskFactors"],
   };
 
@@ -143,17 +148,15 @@ function SearchObjects() {
   }, [inn, innErr, documentsCount, dateStart, dateEnd]);
 
   React.useEffect(() => {
-    console.log(objects);
     if (objects != null && objects.length !== 0) {
       navigate("/response");
-    }
+    } else if (objects != null) setIsSearch(true);
   }, [objects]);
 
   let now = new Date().toISOString().split("T")[0];
 
   const onClickCheckbox = (i) => {
     const newData = checkboxData.map((item, y) => {
-      console.log(i, y);
       item.isTrue = i === y ? !item.isTrue : item.isTrue;
       return item;
     });
@@ -204,15 +207,50 @@ function SearchObjects() {
     dispatch(fetchObjectSearch({ token, body }));
   };
 
+  if (status === "loading") {
+    return <Loader type={"block"} title={"Загружаем данные..."} />;
+  }
+
+  if (isSearch) {
+    return (
+      <NotFound
+        title={"По вашему запросу ничего не нашлось"}
+        titleButton={"Изменить запрос"}
+        onClickButton={() => {
+          navigate("/request");
+          setIsSearch(false);
+        }}
+      />
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <NotFound
+        title={"Технические проблемы с сервером повторите попытку позже"}
+        titleButton={"На главную"}
+        onClickButton={() => {
+          navigate("/");
+          dispatch(setStatus());
+        }}
+      />
+    );
+  }
+
   return (
     <section className={styles.wrapper}>
       <div className={styles.leftWrapper}>
         <div className={styles.title}>
-          <h1>Найдите необходимые данные в пару кликов.</h1>
-          <p>
-            Задайте параметры поиска. <br />
-            Чем больше заполните, тем точнее поиск
-          </p>
+          <div>
+            <h1>Найдите необходимые данные в пару кликов.</h1>
+            <p>
+              Задайте параметры поиска. <br />
+              Чем больше заполните, тем точнее поиск
+            </p>
+          </div>
+          <div className={styles.topPicturesMob}>
+            <img src={document} />
+          </div>
         </div>
         <form onSubmit={(e) => e.preventDefault()}>
           <div className={styles.topForm}>
@@ -312,9 +350,13 @@ function SearchObjects() {
         </form>
       </div>
       <div className={styles.rightWrapper}>
-        <img src={document} />
-        <img src={folder} />
-        <img src={menRocket} />
+        <div className={styles.topPicturesDesc}>
+          <img src={document} />
+          <img src={folder} />
+        </div>
+        <div className={styles.bottomPictures}>
+          <img src={menRocket} />
+        </div>
       </div>
     </section>
   );
